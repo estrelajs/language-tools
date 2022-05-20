@@ -1,0 +1,11 @@
+{
+  "name": "@estrelajs/language-tools",
+  "version": "1.0.0",
+  "author": "Eduardo Rosostolato",
+  "license": "MIT",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {}
+}
