@@ -1,7 +1,8 @@
 {
-    "name": "example-tsc-codebase",
-    "dependencies": {
-        "tsserver-plugin": "file:..",
-        "typescript": "^4.4.3"
-    }
+  "name": "example-tsc-codebase",
+  "dependencies": {
+    "estrela": "^0.8.6",
+    "typescript": "*",
+    "typescript-estrela-plugin": "file:.."
+  }
 }

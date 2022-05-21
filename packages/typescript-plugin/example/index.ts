@@ -1,5 +1,7 @@
-// Edit this file to trigger the TSServer commands.
+import { State } from 'estrela';
 
-const anExampleVariable = "Hello World"
-console.log(anExampleVariable)
-a
+function App() {
+  let count = 0;
+
+  count$;
+}

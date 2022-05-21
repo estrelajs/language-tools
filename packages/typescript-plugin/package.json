@@ -1,9 +1,31 @@
 {
-    "name": "my-plugin",
-    "version": "0.0.1",
-    "license": "MIT",
-    "main": "./out",
-    "dependencies": {
-        "typescript": "^4.4.3"
-    }
+	"name": "typescript-estrela-plugin",
+	"version": "0.1.0",
+	"description": "TypeScript language service plugin that adds IntelliSense for Estrela component states",
+	"keywords": [
+		"TypeScript",
+		"Estrela",
+		"tsx"
+	],
+	"main": "./lib/index.js",
+	"author": "Eduardo Rosostolato",
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/estrelajs/language-tools.git"
+	},
+	"bugs": {
+		"url": "https://github.com/estrelajs/language-tools/issues"
+	},
+	"files": [
+		"lib"
+	],
+	"scripts": {
+		"compile": "tsc",
+		"watch:compile": "tsc --watch",
+		"dev": "TSS_DEBUG_BRK=9229 code example"
+	},
+	"dependencies": {
+		"typescript": "*"
+	}
 }
