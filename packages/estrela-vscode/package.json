@@ -1,0 +1,59 @@
+{
+  "name": "estrela-vscode",
+  "displayName": "Estrela for VSCode",
+  "description": "Estrela Syntax for VSCode",
+  "publisher": "estrelajs",
+  "author": "Eduardo Rosostolato",
+  "icon": "icons/logo.png",
+  "version": "0.1.0",
+  "license": "MIT",
+  "main": "./dist/extension.js",
+  "galleryBanner": {
+    "color": "#009DFF",
+    "theme": "dark"
+  },
+  "categories": [
+    "Programming Languages",
+    "Formatters"
+  ],
+  "keywords": [
+    "estrela",
+    "vscode"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/estrelajs/language-tools.git"
+  },
+  "bugs": {
+    "url": "https://github.com/estrelajs/language-tools/issues"
+  },
+  "engines": {
+    "vscode": "^1.67.0"
+  },
+  "scripts": {
+    "compile": "tsc -b",
+    "watch:compile": "tsc -b -w"
+  },
+  "activationEvents": [
+    "onLanguage:javascriptreact",
+    "onLanguage:typescriptreact"
+  ],
+  "contributes": {
+    "typescriptServerPlugins": [
+      {
+        "name": "typescript-estrela-plugin",
+        "enableForWorkspaceTypeScriptVersions": true
+      }
+    ]
+  },
+  "devDependencies": {
+    "@types/node": "^17.0.35",
+    "@types/vscode": "^1.67.0",
+    "typescript": "^4.6.4"
+  },
+  "dependencies": {
+    "typescript-estrela-plugin": "^0.1.0",
+    "vscode-languageclient": "^6.1.4",
+    "vscode-languageserver": "^6.1.1"
+  }
+}
