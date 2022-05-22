@@ -1,7 +1,11 @@
 import * as ts from 'typescript/lib/tsserverlibrary';
+import { ScriptSourceHelper } from '../helpers/script-source-helper';
 
 export class EstrelaLanguageService implements Partial<ts.LanguageService> {
-  constructor(private readonly tsLang: ts.LanguageService) {}
+  constructor(
+    private readonly tsLang: ts.LanguageService,
+    private readonly source: ScriptSourceHelper
+  ) {}
 
   findReferences = this.bindStateBehavior('findReferences');
   getDefinitionAndBoundSpan = this.bindStateBehavior(
@@ -15,11 +19,7 @@ export class EstrelaLanguageService implements Partial<ts.LanguageService> {
     'getTypeDefinitionAtPosition'
   );
 
-  getCompletionsAtPosition = (
-    filename: string,
-    position: number,
-    options: any
-  ) => {
+  getCompletionsAtPosition(filename: string, position: number, options: any) {
     const prior = this.tsLang.getCompletionsAtPosition(
       filename,
       position,
@@ -39,9 +39,9 @@ export class EstrelaLanguageService implements Partial<ts.LanguageService> {
       });
     }
     return prior;
-  };
+  }
 
-  getCompletionEntryDetails = (
+  getCompletionEntryDetails(
     filename: string,
     position: number,
     name: string,
@@ -49,7 +49,7 @@ export class EstrelaLanguageService implements Partial<ts.LanguageService> {
     source: any,
     preferences: any,
     data: any
-  ) => {
+  ) {
     let prior = this.tsLang.getCompletionEntryDetails(
       filename,
       position,
@@ -83,9 +83,9 @@ export class EstrelaLanguageService implements Partial<ts.LanguageService> {
       }
     }
     return prior;
-  };
+  }
 
-  getQuickInfoAtPosition = (filename: string, position: number) => {
+  getQuickInfoAtPosition(filename: string, position: number) {
     let prior = this.tsLang.getQuickInfoAtPosition(filename, position);
     const definition = this.tsLang.getDefinitionAtPosition(filename, position);
     const state = this.getStateAtPosition(filename, position);
@@ -107,12 +107,16 @@ export class EstrelaLanguageService implements Partial<ts.LanguageService> {
       }
     }
     return prior;
-  };
+  }
 
-  getSemanticDiagnostics = (filename: string) => {
+  getSemanticDiagnostics(filename: string) {
     return this.tsLang.getSemanticDiagnostics(filename).filter(diagnostic => {
       const isError = diagnostic.category === ts.DiagnosticCategory.Error;
-      if (diagnostic.start && isError && diagnostic.code === 2552) {
+      if (
+        isError &&
+        diagnostic.start &&
+        (diagnostic.code === 2551 || diagnostic.code === 2552)
+      ) {
         const state = this.getStateAtPosition(filename, diagnostic.start);
         if (state) {
           return false;
@@ -120,12 +124,13 @@ export class EstrelaLanguageService implements Partial<ts.LanguageService> {
       }
       return true;
     });
-  };
+  }
 
   private bindStateBehavior<T extends keyof ts.LanguageService>(
     method: T
   ): ts.LanguageService[T] {
-    return ((filename: string, position: number) => {
+    // @ts-expect-error
+    return (filename: string, position: number) => {
       let prior = (this.tsLang as any)[method](filename, position);
       if (!prior) {
         const state = this.getStateAtPosition(filename, position);
@@ -134,30 +139,19 @@ export class EstrelaLanguageService implements Partial<ts.LanguageService> {
         }
       }
       return prior;
-    }) as any;
+    };
   }
 
   private getStateAtPosition(
     filename: string,
     position: number
   ): ts.NavigationTree | undefined {
-    const span = this.tsLang.getNameOrDottedNameSpan(
-      filename,
-      position,
-      position
-    );
-    if (span) {
-      const source: ts.SourceFile = (this.tsLang as any).getNonBoundSourceFile(
-        filename
-      );
-      const name = source.text.slice(span.start, span.start + span.length);
-      if (/[^_$]\$$/.test(name)) {
-        const stateName = name.replace(/\$$/, '');
-        const states = this.getStatesAtPosition(filename, span.start);
-        return states.find(s => s.text === stateName);
-      }
+    const states = this.getStatesAtPosition(filename, position);
+    const node = this.source.getNode(filename, position);
+    if (node) {
+      const name = node.getText()?.replace(/\$$/, '');
+      return states.find(s => s.text === name);
     }
-    return undefined;
   }
 
   private getStatesAtPosition(
@@ -172,7 +166,9 @@ export class EstrelaLanguageService implements Partial<ts.LanguageService> {
         item.spans[0].start < position &&
         item.spans[0].start + item.spans[0].length > position
     );
-    return scope?.childItems?.filter(item => item.kind === 'let') ?? [];
+    return (
+      scope?.childItems?.filter(item => /^let|property$/.test(item.kind)) ?? []
+    );
   }
 
   private addStateToDisplayParts(
@@ -196,12 +192,12 @@ export class EstrelaLanguageService implements Partial<ts.LanguageService> {
     };
     const findColonIndex = displayParts.findIndex(part => part.text === ':');
     return displayParts.reduce((acc, part, index) => {
-      if (index === 0) {
-        acc.push(kind);
-      } else if (index === findColonIndex + 2) {
+      if (index === findColonIndex + 2) {
         acc.push(state);
         acc.push(lt);
         acc.push(part);
+      } else if (part.text === 'let') {
+        acc.push(kind);
       } else {
         acc.push(part);
       }

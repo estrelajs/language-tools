@@ -5,8 +5,8 @@
   "tasks": [
     {
       "type": "npm",
-      "label": "Compile",
-      "script": "watch:compile",
+      "label": "Watch",
+      "script": "compile:watch",
       "problemMatcher": [
         {
           "base": "$tsc-watch",
@@ -21,10 +21,15 @@
     },
     {
       "type": "npm",
-      "script": "dev",
-      "label": "Dev",
+      "script": "debug",
+      "label": "Debug",
+      "presentation": {
+        "close": true,
+        "reveal": "silent",
+        "showReuseMessage": false
+      },
       "dependsOn": [
-        "Compile"
+        "Watch"
       ]
     }
   ]

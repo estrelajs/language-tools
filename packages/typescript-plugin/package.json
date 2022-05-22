@@ -1,7 +1,7 @@
 {
 	"name": "typescript-estrela-plugin",
-	"version": "0.1.0",
-	"description": "TypeScript language service plugin that adds IntelliSense for Estrela component states",
+	"version": "0.2.0",
+	"description": "TypeScript language service plugin that adds IntelliSense for Estrela",
 	"keywords": [
 		"TypeScript",
 		"Estrela",
@@ -22,10 +22,16 @@
 	],
 	"scripts": {
 		"compile": "tsc",
-		"watch:compile": "tsc --watch",
-		"dev": "TSS_DEBUG_BRK=9229 code example"
+		"compile:watch": "tsc --watch",
+		"debug": "TSS_DEBUG_BRK=9229 code example",
+		"prepublishOnly": "npm run compile"
 	},
 	"dependencies": {
-		"typescript": "*"
+		"typescript-styled-plugin": "^0.18.2",
+		"typescript-template-language-service-decorator": "^2.3.1",
+		"vscode-languageserver-textdocument": "^1.0.4"
+	},
+	"devDependencies": {
+		"typescript": "^4.5.2"
 	}
 }

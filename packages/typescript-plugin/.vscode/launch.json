@@ -5,14 +5,15 @@
 			"type": "node",
 			"request": "attach",
 			"name": "Debug Styled Plugin",
-			"skipFiles": [
-				"<node_internals>/**"
-			],
+			"preLaunchTask": "Debug",
+			"port": 9229,
 			"outFiles": [
 				"${workspaceFolder}/lib/**/*.js"
 			],
-			"port": 9229,
-			"preLaunchTask": "Dev"
+			"skipFiles": [
+				"<node_internals>/**",
+				"${workspaceFolder}/example/**",
+			],
 		}
 	]
 }
