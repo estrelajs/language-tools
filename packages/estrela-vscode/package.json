@@ -5,11 +5,11 @@
   "publisher": "estrelajs",
   "author": "Eduardo Rosostolato",
   "icon": "assets/logo.png",
-  "version": "0.1.0",
+  "version": "0.1.3",
   "license": "MIT",
   "main": "./dist/extension.js",
   "galleryBanner": {
-    "color": "#009DFF",
+    "color": "#0e2433",
     "theme": "dark"
   },
   "categories": [
@@ -32,7 +32,11 @@
   },
   "scripts": {
     "compile": "tsc -b",
-    "watch:compile": "tsc -b -w"
+    "compile:watch": "tsc -b -w",
+    "package:build": "vsce package --yarn",
+    "package:publish": "vsce publish --yarn",
+    "build": "yarn compile && yarn package:build",
+    "vscode:prepublish": "yarn compile"
   },
   "activationEvents": [
     "onLanguage:javascript",
@@ -60,14 +64,15 @@
       }
     ]
   },
-  "devDependencies": {
-    "@types/node": "^17.0.35",
-    "@types/vscode": "^1.67.0",
-    "typescript": "^4.6.4"
-  },
   "dependencies": {
     "typescript-estrela-plugin": "^0.2.0",
     "vscode-languageclient": "^8.0.1",
     "vscode-languageserver": "^8.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^17.0.35",
+    "@types/vscode": "^1.67.0",
+    "typescript": "^4.6.4",
+    "vsce": "^2.8.0"
   }
 }

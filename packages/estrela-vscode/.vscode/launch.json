@@ -9,7 +9,7 @@
       "name": "Extension",
       "type": "extensionHost",
       "request": "launch",
-      "preLaunchTask": "Compile",
+      "preLaunchTask": "Watch",
       "runtimeExecutable": "${execPath}",
       "outFiles": [
         "${workspaceRoot}/dist/**/*.js"
