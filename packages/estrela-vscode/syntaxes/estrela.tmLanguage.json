@@ -1,11 +1,45 @@
 {
-	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
-	"name": "Estrela",
+	"fileTypes": [
+		"js",
+		"jsx",
+		"ts",
+		"tsx"
+	],
+	"injectionSelector": "L:source.js -string, L:source.jsx -string, L:source.ts -string, L:source.tsx -string",
+	"injections": {
+		"L:source": {
+			"patterns": [
+				{
+					"match": "<",
+					"name": "invalid.illegal.bad-angle-bracket.html"
+				}
+			]
+		}
+	},
 	"patterns": [
 		{
-			"include": "source.tsx"
+			"begin": "(?i)(styled\\([^\\s]+\\))(`)",
+			"beginCaptures": {
+				"1": {
+					"name": "comment.block"
+				}
+			},
+			"end": "(`)",
+			"patterns": [
+				{
+					"include": "source.scss"
+				},
+				{
+					"include": "source.less"
+				},
+				{
+					"include": "source.stylus"
+				},
+				{
+					"include": "source.css"
+				}
+			]
 		}
 	],
-	"repository": {},
-	"scopeName": "source.estrela"
+	"scopeName": "styled.estrela"
 }

@@ -44,6 +44,18 @@
         "name": "typescript-estrela-plugin",
         "enableForWorkspaceTypeScriptVersions": true
       }
+    ],
+    "grammars": [
+      {
+        "injectTo": [
+          "source.js",
+          "source.jsx",
+          "source.ts",
+          "source.tsx"
+        ],
+        "scopeName": "styled.estrela",
+        "path": "./syntaxes/estrela.tmLanguage.json"
+      }
     ]
   },
   "devDependencies": {
