@@ -5,7 +5,7 @@
 		"ts",
 		"tsx"
 	],
-	"injectionSelector": "L:source.js -string, L:source.jsx -string, L:source.ts -string, L:source.tsx -string",
+	"injectionSelector": "L:source.js -string -comment, L:source.jsx -string -comment, L:source.ts -string -comment, L:source.tsx -string -comment",
 	"injections": {
 		"L:source": {
 			"patterns": [
